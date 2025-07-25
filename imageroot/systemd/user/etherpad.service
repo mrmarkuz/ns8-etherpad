@@ -22,7 +22,7 @@ ExecStartPre=/bin/rm -f %t/etherpad.pid %t/etherpad.pod-id
 ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/etherpad.pid \
     --pod-id-file %t/etherpad.pod-id \
     --name etherpad \
-    --publish 127.0.0.1:${TCP_PORT}:80 \
+    --publish 127.0.0.1:${TCP_PORT}:9001 \
     --replace
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/etherpad.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/etherpad.pod-id -t 10

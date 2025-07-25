@@ -15,17 +15,27 @@ EnvironmentFile=-%S/state/smarthost.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
-ExecStartPre=/bin/mkdir -p config
 ExecStartPre=/bin/rm -f %t/etherpad-app.pid %t/etherpad-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/etherpad-app.pid \
     --cidfile %t/etherpad-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/etherpad.pod-id --replace -d --name  etherpad-app \
-    --volume etherpad-app:/var/www/html/:Z \
-    --volume ./config:/tmp:Z \
-    --env=NGINX_* \
-    --env 'CONFIG_DATABASE_URI="postgresql://postgres:Nethesis,1234@127.0.0.1:5432/etherpad"' \
-    ${NGINX_IMAGE}
+    --volume plugins:/opt/etherpad-lite/src/plugin_packages:Z \
+    --volume etherpad-var:/opt/etherpad-lite/var:Z \
+    --env NODE_ENV=production \
+    --env ADMIN_PASSWORD=Nethesis,1234 \
+    --env DB_CHARSET=utf8mb4 \
+    --env DB_HOST=postgresql-app \
+    --env DB_NAME=etherpad \
+    --env DB_PASS=Nethesis,1234 \
+    --env DB_PORT=5432 \
+    --env DB_TYPE=postgres \
+    --env DB_USER=postgres \
+    --env DEFAULT_PAD_TEXT=' ' \
+    --env DISABLE_IP_LOGGING=false \
+    --env SOFFICE=null \
+    --env TRUST_PROXY=true \
+    ${ETHERPAD_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/etherpad-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP etherpad-app
 SyslogIdentifier=%u
