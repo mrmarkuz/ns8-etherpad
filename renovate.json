@@ -1,14 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "ignorePaths": ["**/ui/**", "**/.devcontainer/**"],
+  "extends": [
+    "config:recommended"
+  ],
+  "ignorePaths": [
+    "**/ui/**",
+    "**/.devcontainer/**"
+  ],
   "customManagers": [
     {
       "customType": "regex",
       "managerFilePatterns": [
         "/build-images.sh/"
       ],
-      "matchStrings": [        
+      "matchStrings": [
         "docker\\.io/etherpad/etherpad:(?<currentValue>[-0-9\\.a-z]+)"
       ],
       "datasourceTemplate": "docker",
