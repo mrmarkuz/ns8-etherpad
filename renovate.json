@@ -2,28 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "ignorePaths": ["**/ui/**", "**/.devcontainer/**"],
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["build-images.sh"],
-      "matchStrings": [
-        "docker\\.io/nginx:(?<currentValue>[-0-9\\.a-z]+)"
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/build-images.sh/"
+      ],
+      "matchStrings": [        
+        "docker\\.io/etherpad/etherpad:(?<currentValue>[-0-9\\.a-z]+)"
       ],
       "datasourceTemplate": "docker",
-      "depNameTemplate": "nginx"
-    },
-    {
-      "fileMatch": ["build-images.sh"],
-      "matchStrings": [
-        "docker\\.io/postgres:(?<currentValue>[-0-9\\.a-z]+)"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "postgres"
-    }
-  ],
-  "packageRules": [
-    {
-      "matchPackageNames": ["postgres"],
-      "allowedVersions": "<= 16.0"
+      "depNameTemplate": "etherpad/etherpad"
     }
   ]
 }
